@@ -1,8 +1,8 @@
 package main
 
 import (
-	"sort"
 	"log"
+	"sort"
 )
 
 func arrayPairSum(nums []int) int {
@@ -11,8 +11,8 @@ func arrayPairSum(nums []int) int {
 	log.Println(nums)
 
 	var sum int
-	for k,v := range nums{
-		if k % 2 == 1{
+	for k, v := range nums {
+		if k%2 == 1 {
 			log.Println(v)
 			sum += v
 		}
@@ -22,8 +22,8 @@ func arrayPairSum(nums []int) int {
 
 }
 
-func main(){
-	var nums = []int{1,4,3,2}
+func main() {
+	var nums = []int{1, 4, 3, 2}
 	log.Println(arrayPairSum(nums))
 
 }
