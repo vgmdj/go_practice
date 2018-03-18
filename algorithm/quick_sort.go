@@ -21,9 +21,9 @@ func quickSort(values []int) {
 			i++
 		}
 	}
-	values[head] = mid
-	quickSort(values[:head])
-	quickSort(values[head+1:])
+	values[i-1] = mid
+	quickSort(values[:i-1])
+	quickSort(values[i:])
 
 }
 
