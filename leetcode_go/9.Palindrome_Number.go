@@ -3,7 +3,7 @@ package main
 import "log"
 
 //first think
-func isPalindrome1(x int) bool {
+func isPalindromeI(x int) bool {
 	palindrome := 0
 	origin := x
 
@@ -21,7 +21,7 @@ func isPalindrome1(x int) bool {
 	return origin == palindrome
 }
 
-func isPalindrome(x int) bool {
+func isPalindromeII(x int) bool {
 	// Special cases:
 	// As discussed above, when x < 0, x is not a palindrome.
 	// Also if the last digit of the number is 0, in order to be a palindrome,
@@ -44,6 +44,6 @@ func isPalindrome(x int) bool {
 }
 
 func main() {
-	log.Println(isPalindrome(-2147447412))
+	log.Println(isPalindromeII(-2147447412))
 
 }
