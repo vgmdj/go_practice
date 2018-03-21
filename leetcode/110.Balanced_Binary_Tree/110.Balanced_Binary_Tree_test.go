@@ -1,8 +1,8 @@
-package Symmetric_Tree
+package Balanced_Binary_Tree
 
 import (
-	"log"
 	"testing"
+	"log"
 )
 
 func TestOK(t *testing.T) {
@@ -17,7 +17,9 @@ func TestOK(t *testing.T) {
 	root.Right.Left = getNewNode(4)
 	root.Right.Right = getNewNode(3)
 
-	log.Println(isSymmetric(&root))
+	log.Println(isBalanced(&root))
+	log.Println(isBalanced(nil))
+	log.Println(isBalanced(&TreeNode{0,getNewNode(2),getNewNode(2)}))
 
 }
 
