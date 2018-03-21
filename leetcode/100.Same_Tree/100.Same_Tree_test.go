@@ -1,4 +1,4 @@
-package Symmetric_Tree
+package Same_Tree
 
 import (
 	"log"
@@ -17,7 +17,11 @@ func TestOK(t *testing.T) {
 	root.Right.Left = getNewNode(4)
 	root.Right.Right = getNewNode(3)
 
-	log.Println(isSymmetric(&root))
+	root2 := root
+
+	log.Println(isSameTree(&root, &root2))
+
+	log.Println(isSameTree(&root, nil))
 
 }
 

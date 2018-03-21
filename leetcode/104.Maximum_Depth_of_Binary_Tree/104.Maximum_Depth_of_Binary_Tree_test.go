@@ -1,8 +1,8 @@
-package Symmetric_Tree
+package Maximum_Depth_of_Binary_Tree
 
 import (
-	"log"
 	"testing"
+	"log"
 )
 
 func TestOK(t *testing.T) {
@@ -17,7 +17,9 @@ func TestOK(t *testing.T) {
 	root.Right.Left = getNewNode(4)
 	root.Right.Right = getNewNode(3)
 
-	log.Println(isSymmetric(&root))
+	log.Println(maxDepth(&root))
+	log.Println(maxDepth(nil))
+	log.Println(maxDepth(&TreeNode{0,nil,nil}))
 
 }
 

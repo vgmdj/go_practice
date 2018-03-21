@@ -1,34 +1,33 @@
 package Symmetric_Tree
 
-import "fmt"
-
 type TreeNode struct {
 	Val   int
 	Left  *TreeNode
 	Right *TreeNode
 }
 
-//中序遍历并字符串
 func isSymmetric(root *TreeNode) bool {
 	if root == nil {
 		return true
 	}
 
-	var array []string
-	getTreeArray(root, array)
+	return checkTree(root.Left, root.Right)
 
-	return true
 }
 
-func getTreeArray(root *TreeNode, array []string) {
-	if root == nil {
-		return
+func checkTree(left *TreeNode, right *TreeNode) bool {
+	if left == nil && right == nil {
+		return true
 	}
 
-	getTreeArray(root.Left, array)
+	if left == nil || right == nil {
+		return false
+	}
 
-	fmt.Println(root.Val)
+	if left.Val != right.Val {
+		return false
+	}
 
-	getTreeArray(root.Right, array)
+	return checkTree(left.Left, right.Right) && checkTree(left.Right, right.Left)
 
 }
