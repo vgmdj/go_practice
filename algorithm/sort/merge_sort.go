@@ -7,6 +7,7 @@ package sort
 master公式 T(N) = aT(n/b)+O(n^d)
 T(N)=2T(n/2)+(n)
 a=b=2 d=1
+
 */
 func mergeSort(nums []int) []int {
 	if len(nums) <= 1 {
