@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestFactory(t *testing.T) {
+func TestCaculatorFactory(t *testing.T) {
 
 	opFactory := new(OperationFactory)
 	operation := opFactory.CreateOperation("+")
@@ -14,8 +14,4 @@ func TestFactory(t *testing.T) {
 	operation = opFactory.CreateOperation("-")
 	operation.SetNumber(2, 1)
 	t.Logf("this is sub operation, 2-1=%v\n", operation.GetResult())
-
-	phonefactory := PhoneFactory{}
-	phone := phonefactory.CreatePhone("HW")
-	phone.ShowBrand()
 }
