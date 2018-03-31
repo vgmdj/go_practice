@@ -1,4 +1,4 @@
-package factory
+package factory_method
 
 //Operation 操作接口
 type Operation interface {
