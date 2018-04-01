@@ -1,4 +1,4 @@
-package Strategy
+package strategy
 
 import (
 	"github.com/stretchr/testify/assert"
