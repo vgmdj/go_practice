@@ -17,7 +17,7 @@ func quickSort(values []int) {
 			i++
 		}
 	}
-	values[i-1] = mid
+
 	quickSort(values[:i-1])
 	quickSort(values[i:])
 
