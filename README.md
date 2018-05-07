@@ -13,6 +13,5 @@
 ## sql学习
 sql语句修炼
 
-## 后续
-leetcode刷完就poj
-golang熟悉了就python
+## 每日总结
+https://blog.vgmdj.cn
