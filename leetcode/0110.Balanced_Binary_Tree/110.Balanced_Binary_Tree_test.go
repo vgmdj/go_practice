@@ -1,8 +1,8 @@
 package Balanced_Binary_Tree
 
 import (
-	"testing"
 	"log"
+	"testing"
 )
 
 func TestOK(t *testing.T) {
@@ -19,7 +19,7 @@ func TestOK(t *testing.T) {
 
 	log.Println(isBalanced(&root))
 	log.Println(isBalanced(nil))
-	log.Println(isBalanced(&TreeNode{0,getNewNode(2),getNewNode(2)}))
+	log.Println(isBalanced(&TreeNode{0, getNewNode(2), getNewNode(2)}))
 
 }
 

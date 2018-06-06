@@ -22,7 +22,6 @@ func TestMoveZeroes(t *testing.T) {
 	checkArray(ast, test3, []int{0, 0})
 }
 
-
 func TestMoveZeroesII(t *testing.T) {
 	ast := assert.New(t)
 
@@ -38,8 +37,6 @@ func TestMoveZeroesII(t *testing.T) {
 	moveZeroesII(test3)
 	checkArray(ast, test3, []int{0, 0})
 }
-
-
 
 func checkArray(ast *assert.Assertions, src, dest []int) {
 	ast.Equal(len(src), len(dest))

@@ -1,6 +1,5 @@
 package Reverse_Integer
 
-
 // min = -1 << 31 + 1
 var MIN int = -0x80000000
 
@@ -25,5 +24,3 @@ func reverse(x int) int {
 	return result
 
 }
-
-
