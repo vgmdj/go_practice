@@ -2,7 +2,7 @@ package Pascal_s_Triangle
 
 import "testing"
 
-func TestGeneral(t *testing.T){
+func TestGeneral(t *testing.T) {
 	t.Log(generate(0))
 	t.Log(generate(1))
 	t.Log(generate(2))
