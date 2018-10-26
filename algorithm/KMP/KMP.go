@@ -1,4 +1,4 @@
-package KMP
+package kmp
 
 func kmpIndexOf(s string, m string) int {
 	if s == "" || m == "" || len(s) < len(m) {
