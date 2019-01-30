@@ -8,9 +8,9 @@ func InOrder(root *Tree) []int {
 		return nil
 	}
 
-	result = append(result, PreOrder(root.Left)...)
+	result = append(result, InOrder(root.Left)...)
 	result = append(result, root.Val)
-	result = append(result, PreOrder(root.Right)...)
+	result = append(result, InOrder(root.Right)...)
 
 	return result
 
