@@ -1,7 +1,7 @@
 package Remove_Duplicates_from_Sorted_Array_II
 
 func removeDuplicates(nums []int) int {
-	var pre, cur = 1, 1
+	var pre, cur = 1, 2
 
 	for cur < len(nums) {
 		if nums[cur] == nums[pre] && nums[pre] == nums[pre-1] {
