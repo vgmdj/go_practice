@@ -2,19 +2,23 @@ package Subsets
 
 func subsets(nums []int) [][]int {
 	var result [][]int
-	backTrack(&result, nums, []int{}, -1, 0)
+	var visited = make([]bool, len(nums))
+	backTrack(&result, nums, []int{}, 0, visited)
 	return result
 
 }
 
-func backTrack(result *[][]int, nums, subset []int, preNode, index int) {
-	if preNode == index-1 {
-		*result = append(*result, append([]int{}, subset[:]...))
-	}
+func backTrack(result *[][]int, nums, subset []int, start int, visited []bool) {
+	*result = append(*result, append([]int{}, subset[:]...))
 
-	for i := index; i < len(nums); i++ {
-		backTrack(result, nums, append(subset, nums[index]), index, i+1)
-		index++
+	for i := start; i < len(nums); i++ {
+		if visited[i] {
+			continue
+		}
+
+		visited[i] = true
+		backTrack(result, nums, append(subset, nums[i]), i+1, visited)
+		visited[i] = false
 	}
 
 }
