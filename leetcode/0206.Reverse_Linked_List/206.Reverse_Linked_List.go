@@ -10,28 +10,12 @@ func reverseList(head *ListNode) *ListNode {
 	return reverseListRecursive(head)
 }
 
-func reverseListRecursive(node *ListNode) *ListNode {
-	if node == nil {
-		return nil
-	}
-	if node.Next == nil {
-		return node
-	}
-	tail := reverseListRecursive(node.Next)
-	head := node
-	h := head.Next
-	h.Next = head
-	head.Next = nil
-	return tail
-}
-
-//the second answer
-func reverseList2(head *ListNode) *ListNode {
+func reverseListRecursive(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {
 		return head
 	}
 
-	node := reverseList(head.Next)
+	node := reverseListRecursive(head.Next)
 	head.Next.Next = head
 	head.Next = nil
 
@@ -39,24 +23,20 @@ func reverseList2(head *ListNode) *ListNode {
 }
 
 //non-recursive answer
-func reverseList3(head *ListNode) *ListNode{
-	if head == nil || head.Next == nil{
+func reverseListNonRecursive(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
 		return head
 	}
 
-	p := head.Next
-	for p.Next != nil{
-		t := p.Next.Next
-		p.Next.Next = head.Next
-		head.Next = p.Next
-		p.Next = t
+	var d = &ListNode{Next: head}
+	p, c := head, head.Next
+	for c != nil {
+		p.Next = c.Next
+		c.Next = d.Next
+		d.Next = c
+		c = p.Next
 	}
 
-	node := head.Next
-	p.Next = head
-	head.Next = nil
-
-	return node
-
+	return d.Next
 
 }
