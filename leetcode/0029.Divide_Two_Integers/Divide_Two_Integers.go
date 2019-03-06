@@ -13,15 +13,15 @@ func divide(dividend int, divisor int) int {
 
 	// capture the sign
 	if divisor < 0 && dividend < 0 {
-		divisor = -1 * divisor
-		dividend = -1 * dividend
+		divisor = -divisor
+		dividend = -dividend
 
 	} else if divisor < 0 {
-		divisor = -1 * divisor
+		divisor = -divisor
 		sign = -1
 
 	} else if dividend < 0 {
-		dividend = -1 * dividend
+		dividend = -dividend
 		sign = -1
 
 	}
@@ -36,5 +36,9 @@ func divide(dividend int, divisor int) int {
 		}
 	}
 
-	return sign * quotient
+	if sign == -1 {
+		return -quotient
+	}
+
+	return quotient
 }
