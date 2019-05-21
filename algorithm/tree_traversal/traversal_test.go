@@ -25,18 +25,38 @@ func TestTreeTraversal(t *testing.T) {
 	testArray(ast, postResult, PostOrderNonRecursive(TestTree()))
 
 	//BFS
-	bfsResult := []int{1,2,3,4,5,6,7}
-	testArray(ast,bfsResult,LevelTraversal(TestTree()))
+	bfsResult := []int{1, 2, 3, 4, 5, 6, 7}
+	testArray(ast, bfsResult, LevelTraversal(TestTree()))
+
+	//dfs pre-order traversal but return the bfs [][]int result
+	bfsResults := [][]int{
+		{1},
+		{2, 3},
+		{4, 5},
+		{6, 7},
+	}
+	testArrays(ast, bfsResults, LevelTraversal2(TestTree()))
 
 }
 
 func testArray(ast *assert.Assertions, array1 []int, array2 []int) {
-	if ast.Equal(len(array1), len(array2)) {
+	if !ast.Equal(len(array1), len(array2)) {
 		return
 	}
 
 	for i := 0; i < len(array1); i++ {
 		ast.Equal(array1[i], array2[i])
+	}
+
+}
+
+func testArrays(ast *assert.Assertions, array1 [][]int, array2 [][]int) {
+	if !ast.Equal(len(array1), len(array2)) {
+		return
+	}
+
+	for i := 0; i < len(array1); i++ {
+		testArray(ast, array1[i], array2[i])
 	}
 
 }

@@ -8,8 +8,8 @@ func PostOrder(root *Tree) []int {
 		return nil
 	}
 
-	result = append(result, PreOrder(root.Left)...)
-	result = append(result, PreOrder(root.Right)...)
+	result = append(result, PostOrder(root.Left)...)
+	result = append(result, PostOrder(root.Right)...)
 	result = append(result, root.Val)
 
 	return result
