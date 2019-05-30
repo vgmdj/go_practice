@@ -23,8 +23,6 @@ func lengthOfLongestSubstring2(s string) int {
 			max = right - left + 1
 		}
 
-		continue
-
 	}
 
 	return max
