@@ -1,7 +1,9 @@
 package Maximum_Subarray
 
-//the most simple way
-func maxSubArray1(nums []int) int {
+import "math"
+
+// the most simple way
+func maxSubArray(nums []int) int {
 	max := 0
 	if len(nums) > 0 {
 		max = nums[0]
@@ -27,25 +29,54 @@ func maxSubArray1(nums []int) int {
 	return max
 }
 
-var MIN_INT32 = -0x80000000
-var MAX_INT32 = 0xffffffff
-
-//better way to solve the problem
-func maxSubArray(nums []int) int {
-	max := MIN_INT32
-	sum := 0
-
-	for _, v := range nums {
-		sum += v
-
-		if max < sum {
-			max = sum
-		}
-
-		if sum < 0 {
-			sum = 0
-		}
-
+// dp solution and O(n) space complexity
+func maxSubArray2(nums []int) int {
+	if len(nums) == 0 {
+		return 0
 	}
+
+	dp := make([]int, len(nums))
+	dp[0] = nums[0]
+
+	max := math.MinInt32
+
+	for i := 1; i < len(nums); i++ {
+		if nums[i]+dp[i-1] > nums[i] {
+			dp[i] = nums[i] + dp[i-1]
+
+		} else {
+			dp[i] = nums[i]
+
+		}
+
+		if max < dp[i] {
+			max = dp[i]
+		}
+	}
+
 	return max
 }
+
+// dp solution and O(1) space complexity
+func maxSubArray3(nums []int) int {
+	var sum = math.MinInt32
+	var result = math.MinInt32
+
+	for i := 0; i < len(nums); i++ {
+		sum = max(nums[i], sum+nums[i])
+		result = max(result, sum)
+	}
+
+	return result
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+
+
+
