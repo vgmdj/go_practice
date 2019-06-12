@@ -9,7 +9,7 @@ import (
 func TestPermutation(t *testing.T) {
 	ast := assert.New(t)
 
-	//ast.Equal(true,checkInclusion("abdacdefg","defgcdlfgeiadbcdaefggil"))
+	ast.Equal(true, checkInclusion("abdacdefg", "defgcdlfgeiadbcdaefggil"))
 	ast.Equal(true, checkInclusion("adc", "dcda"))
 
 }
