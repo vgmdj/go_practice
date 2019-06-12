@@ -14,9 +14,7 @@ func TestBubble(t *testing.T) {
 
 	right := []int{1, 2, 2, 3, 4, 6, 8, 9}
 
-	for i := range right {
-		ast.Equal(nums[i], right[i])
-	}
+	ast.Equal(right, nums)
 
 }
 
@@ -28,9 +26,7 @@ func TestSelect(t *testing.T) {
 
 	right := []int{1, 2, 2, 3, 4, 6, 8, 9}
 
-	for i := range right {
-		ast.Equal(nums[i], right[i])
-	}
+	ast.Equal(right, nums)
 
 }
 
@@ -42,9 +38,7 @@ func TestInsert(t *testing.T) {
 
 	right := []int{1, 2, 2, 3, 4, 6, 8, 9}
 
-	for i := range right {
-		ast.Equal(nums[i], right[i])
-	}
+	ast.Equal(right, nums)
 
 }
 
@@ -56,9 +50,7 @@ func TestQuick(t *testing.T) {
 
 	right := []int{1, 2, 2, 3, 4, 6, 8, 9}
 
-	for i := range right {
-		ast.Equal(nums[i], right[i])
-	}
+	ast.Equal(right, nums)
 
 }
 
@@ -70,8 +62,6 @@ func TestHeap(t *testing.T) {
 
 	right := []int{1, 2, 2, 3, 4, 6, 8, 9}
 
-	for i := range right {
-		ast.Equal(nums[i], right[i])
-	}
+	ast.Equal(right, nums)
 
 }
