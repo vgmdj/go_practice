@@ -68,14 +68,14 @@ func combinationSum(candidates []int, target int) [][]int {
 	var result [][]int
 	sort.Ints(candidates)
 	for index := range candidates {
-		backTrack(&result, []int{candidates[index]}, candidates, index, candidates[index], target)
+		backTrack2(&result, []int{candidates[index]}, candidates, index, candidates[index], target)
 	}
 
 	return result
 
 }
 
-func backTrack(result *[][]int, combination []int, candidates []int, root, sum, target int) {
+func backTrack2(result *[][]int, combination []int, candidates []int, root, sum, target int) {
 	if sum == target {
 		*result = append(*result, append([]int{}, combination[:]...))
 		return
@@ -85,7 +85,30 @@ func backTrack(result *[][]int, combination []int, candidates []int, root, sum, 
 		if sum+candidates[position] > target {
 			continue
 		}
-		backTrack(result, append(combination, candidates[position]), candidates, position, sum+candidates[position], target)
+		backTrack2(result, append(combination, candidates[position]), candidates, position, sum+candidates[position], target)
 	}
 
+}
+
+func combinationSum2(candidates []int, target int) [][]int {
+	result := make([][]int, 0)
+	sort.Ints(candidates)
+	backTracking2(candidates, target, &result, []int{}, 0)
+	return result
+
+}
+
+func backTracking2(candidates []int, target int, result *[][]int, subset []int, pos int) {
+	if target == 0 {
+		*result = append(*result, append([]int{}, subset[:]...))
+		return
+	}
+
+	for i := pos; i < len(candidates); i++ {
+		if target < candidates[i] {
+			return
+		}
+		backTracking2(candidates, target-candidates[i], result, append(subset, candidates[i]), i)
+
+	}
 }
