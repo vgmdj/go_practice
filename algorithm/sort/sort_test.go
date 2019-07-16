@@ -65,3 +65,15 @@ func TestHeap(t *testing.T) {
 	ast.Equal(right, nums)
 
 }
+
+func TestRadixSort(t *testing.T) {
+	ast := assert.New(t)
+
+	nums := []int{83, 6, 24, 35, 112, 221, 1887, 9}
+	RadixSort(nums)
+
+	right := []int{6, 9, 24, 35, 83, 112, 221, 1887}
+
+	ast.Equal(right, nums)
+
+}
