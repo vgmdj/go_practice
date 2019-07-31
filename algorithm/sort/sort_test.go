@@ -66,6 +66,18 @@ func TestHeap(t *testing.T) {
 
 }
 
+func TestMerge(t *testing.T) {
+	ast := assert.New(t)
+
+	nums := []int{8, 6, 4, 3, 2, 2, 1, 9}
+	test := mergeSort(nums)
+
+	right := []int{1, 2, 2, 3, 4, 6, 8, 9}
+
+	ast.Equal(right, test)
+
+}
+
 func TestRadixSort(t *testing.T) {
 	ast := assert.New(t)
 
