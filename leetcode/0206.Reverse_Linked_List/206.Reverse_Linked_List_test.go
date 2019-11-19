@@ -2,8 +2,6 @@ package Reverse_Linked_List
 
 import (
 	"testing"
-
-	"github.com/vgmdj/utils/logger"
 )
 
 func TestReverseList(t *testing.T) {
@@ -25,14 +23,14 @@ func TestReverseList(t *testing.T) {
 		},
 	}
 
-	show(reverseList(list))
+	show(t, reverseList(list))
 
 }
 
-func show(head *ListNode) {
+func show(t *testing.T, head *ListNode) {
 	var p = head
 	for p != nil {
-		logger.Info(p.Val)
+		t.Log(p.Val)
 		p = p.Next
 	}
 
