@@ -7,43 +7,32 @@ func findSubstring(s string, words []string) []int {
 
 	length := len(words[0])
 	size := len(words) * length
-
-	result := make([]int, 0)
-	counter := make(map[string]int)
+	wordMap := make(map[string]int, len(words))
 	for _, v := range words {
-		counter[v]++
+		wordMap[v]++
 	}
 
-	left := 0
-	for i := 0; i <= len(s)-length; {
-		selector := s[i : i+length]
-		c, ok := counter[selector]
-		if ok && c > 0 {
-			counter[selector]--
-			if i-left+length == size {
-				result = append(result, left)
-			}
-			i += length
-
-			continue
+	result := make([]int, 0)
+	for i := 0; i <= len(s)-size; i++ {
+		if match(s[i:i+size], wordMap, length) {
+			result = append(result, i)
 		}
-
-		alreadyIncr := false
-		for left <= i-length {
-			counter[s[left:left+length]]++
-			left += length
-			if s[left-length-1:left] == selector {
-				alreadyIncr = true
-				break
-			}
-		}
-
-		if !alreadyIncr {
-			i++
-			left = i
-		}
-
 	}
 
 	return result
+}
+
+func match(text string, wordMap map[string]int, length int) bool {
+	counter := make(map[string]int, len(wordMap))
+	for i := 0; i <= len(text)-length; i += length {
+		str := text[i : i+length]
+		counter[str]++
+
+		if counter[str] > wordMap[str] {
+			return false
+		}
+	}
+
+	return true
+
 }

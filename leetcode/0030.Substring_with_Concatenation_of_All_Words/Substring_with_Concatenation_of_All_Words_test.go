@@ -22,7 +22,7 @@ func Test_findSubstring(t *testing.T) {
 				"barfoofoobarmanbarbarbarfoofoofoobar",
 				[]string{"foo", "bar"},
 			},
-			[]int{0, 6,21,32},
+			[]int{0, 6, 21, 30},
 		},
 		{
 			"simple",
@@ -36,9 +36,17 @@ func Test_findSubstring(t *testing.T) {
 			"null",
 			args{
 				"wordgoodgoodgoodbestword",
-				[]string{},
+				[]string{"word", "good", "best", "word"},
 			},
 			[]int{},
+		},
+		{
+			"same",
+			args{
+				"aaaaaaaa",
+				[]string{"aa", "aa", "aa"},
+			},
+			[]int{0, 1, 2},
 		},
 	}
 	for _, tt := range tests {
