@@ -4,8 +4,28 @@ import (
 	"sort"
 )
 
+/*
+m
+n
+
+i = (1+m)/2
+i+j = (n+m)/2
+j=(n+m)/2-i
+j>=0
+n+m >= 2m
+n>=m
+
+
+
+left      |     right
+1,2,3...i | i+1,.....m
+1,2,3...j | j+1,.....n
+
+
+*/
+
 // O(log(m+n))
-func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
+func findMedianSortedArrays0(nums1 []int, nums2 []int) float64 {
 	//ensure n >= m
 	m, n := len(nums1), len(nums2)
 	if m > n {
