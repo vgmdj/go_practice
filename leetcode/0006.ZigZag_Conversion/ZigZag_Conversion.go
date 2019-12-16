@@ -29,3 +29,37 @@ func convert(s string, numRows int) string {
 
 	return string(result)
 }
+
+func convert2(s string, numRows int) string {
+	if numRows == 1 || numRows >= len(s) {
+		return s
+	}
+
+	rows := Min(len(s), numRows)
+	contents := make([][]byte, rows)
+
+	row, step := 0, -1
+	for i := 0; i < len(s); i++ {
+		contents[row] = append(contents[row], s[i])
+		if row == 0 || row == numRows-1 {
+			step = -step
+		}
+		row += step
+	}
+
+	result := ""
+	for _, v := range contents {
+		result += string(v)
+	}
+
+	return result
+
+}
+
+func Min(a, b int) int {
+	if a > b {
+		return b
+	}
+
+	return a
+}

@@ -1,26 +1,23 @@
 package Reverse_Integer
 
-// min = -1 << 31 + 1
-var MIN int = -0x80000000
-
-// max = 1 << 31 -1
-var MAX int = 0x7FFFFFFF
+import "math"
 
 func reverse(x int) int {
-
-	result := 0
-
-	for x != 0 {
-		remainder := x % 10
-		x = x / 10
-		result = result*10 + remainder
-
+	if x > -10 && x < 10 {
+		return x
 	}
 
-	if result < MIN || result > MAX {
-		result = 0
+	result := 0
+	for x != 0 {
+		c := x % 10
+		x /= 10
+		if result > math.MaxInt32/10 || (result == math.MaxInt32/10 && c > math.MaxInt32%10) ||
+			result < math.MinInt32/10 || (result == math.MinInt32/10 && c < math.MinInt32%10) {
+			return 0
+		}
+
+		result = result*10 + c
 	}
 
 	return result
-
 }
