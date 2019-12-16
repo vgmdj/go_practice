@@ -21,29 +21,29 @@ func myAtoi(str string) int {
 
 	rst := 0
 	for i := index; i < len(str); i++ {
-		if str[i] < '0' || str[i] > '9' || rst > math.MaxInt32 {
+		if str[i] < '0' || str[i] > '9' {
 			break
 
 		}
-		rst = rst*10 + int(str[i]-'0')
-	}
 
-	result, over := isOverflow(sign, rst)
-	if over {
-		return result
+		if critical, ok := isOverflow(rst*sign, int(str[i]-'0')); ok {
+			return critical
+		}
+
+		rst = rst*10 + int(str[i]-'0')
 	}
 
 	return sign * rst
 
 }
 
-func isOverflow(sign, rst int) (int, bool) {
-	if sign == 1 && rst > math.MaxInt32 {
+func isOverflow(rst int, add int) (int, bool) {
+	if rst > math.MaxInt32/10 || (rst == math.MaxInt32/10 && add > math.MaxInt32%10) {
 		return math.MaxInt32, true
 
 	}
 
-	if sign == -1 && sign*rst < math.MinInt32 {
+	if rst < math.MinInt32/10 || (rst == math.MinInt32/10 && -add < math.MinInt32%10) {
 		return math.MinInt32, true
 	}
 

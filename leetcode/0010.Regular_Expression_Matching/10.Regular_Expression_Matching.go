@@ -1,5 +1,11 @@
 package Regular_Expression_Matching
 
+/*
+. 代表单个任意字符
+* 代表前面的字符出现n次，n 可为0
+
+*/
+
 func isMatch(s string, p string) bool {
 	dp := make([][]bool, len(p)+1)
 	for i := range dp {
@@ -8,6 +14,7 @@ func isMatch(s string, p string) bool {
 
 	dp[0][0] = true
 
+	//如果偶数位为*，且*全取0，则可表示为空
 	for i := 2; i < len(dp); i += 2 {
 		if p[i-1] == '*' {
 			dp[i][0] = true
