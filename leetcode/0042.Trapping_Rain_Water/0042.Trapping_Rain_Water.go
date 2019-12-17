@@ -71,3 +71,39 @@ func trap2(height []int) int {
 
 	return result
 }
+
+// two pointer
+func trap3(height []int) int {
+	mLeft, mRight := 0, 0
+	result := 0
+	left, right := 0, len(height)-1
+
+	for left < right {
+		if height[left] < height[right] {
+			if height[left] > mLeft {
+				mLeft = height[left]
+
+			} else {
+				result += mLeft - height[left]
+
+			}
+
+			left++
+
+		} else {
+			if height[right] > mRight {
+				mRight = height[right]
+
+			} else {
+				result += mRight - height[right]
+
+			}
+
+			right--
+		}
+
+	}
+
+	return result
+
+}

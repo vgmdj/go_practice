@@ -14,4 +14,5 @@ func TestTrap(t *testing.T) {
 
 	ast.Equal(6, trap2(test1))
 
+	ast.Equal(6, trap3(test1))
 }
