@@ -1,37 +1,35 @@
 package segment_tree
 
-// SegmentTree the data structure define
 type SegmentTree struct {
-	data []int
-	sum  []int
+	tree  []int
+	data  []int
+	merge func(int, int) int
 }
 
-// NewSegmentTree the construct of the segment tree
-func NewSegmentTree(array []int) *SegmentTree {
+func NewSegmentTree(array []int, merge func(int, int) int) *SegmentTree {
 	return &SegmentTree{
-		data: array,
-		sum:  make([]int, len(array)*4),
+		tree:  make([]int, len(array)*4),
+		data:  make([]int, len(array)),
+		merge: merge,
 	}
 }
 
-// PushUp update the node info
-func (st *SegmentTree) PushUp(rt int) {
+// build segment_tree from left to right
+func (st *SegmentTree) BuildSegmentTree(index, left, right int) int {
+	if left == right {
+		st.tree[index] = st.data[left]
+		return st.tree[index]
+	}
 
-}
+	leftChild := 2*index + 1
+	rightChild := 2*index + 2
+	mid := (left + right) / 2
 
-// Build build the segment tree
-func (st *SegmentTree) Build(l, r, rt int) {
+	leftMid := st.BuildSegmentTree(leftChild, left, mid)
+	rightMid := st.BuildSegmentTree(rightChild, mid+1, right)
 
-}
+	st.tree[index] = st.merge(leftMid, rightMid)
 
-// Update st.data[l] += num
-// then update the sum from left to right
-func (st *SegmentTree) Update(num, l, r, rt int) {
+	return st.tree[index]
 
-}
-
-// Sum return the sum of data from left to right
-func (st *SegmentTree) Sum(l, r int) int {
-
-	return 0
 }
