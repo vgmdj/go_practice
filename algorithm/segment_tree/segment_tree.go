@@ -10,17 +10,29 @@ type SegmentTree struct {
 func NewSegmentTree(array []int) *SegmentTree {
 	return &SegmentTree{
 		data: array,
-		sum:  make([]int, len(array)*4),
+		sum:  make([]int, len(array)<<2),
 	}
 }
 
 // PushUp update the node info
+// if the root is rt, the left child is rt*2 = rt<<1
+// and the right child is rt*2+1 = rt<<1+1 = rt<<1|1
 func (st *SegmentTree) PushUp(rt int) {
-
+	st.sum[rt] = st.sum[rt<<2] + st.sum[rt<<2|1]
 }
 
 // Build build the segment tree
 func (st *SegmentTree) Build(l, r, rt int) {
+	if l == r {
+		st.sum[rt] = st.data[l]
+		return
+	}
+
+	mid := (l + r) >> 1
+	st.Build(l, mid, rt<<1)
+	st.Build(mid+1, r, rt<<1|1)
+
+	st.PushUp(rt)
 
 }
 
