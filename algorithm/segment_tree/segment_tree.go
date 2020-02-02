@@ -68,7 +68,7 @@ func (st *SegmentTree) update(l, r, i, num, rt int) {
 
 // SumRange return the sum of data from left to right
 func (st *SegmentTree) SumRange(l, r int) int {
-	return st.sumRange(0, len(st.data), l, r, 0)
+	return st.sumRange(0, len(st.data)-1, l, r, 0)
 }
 
 // L and R represent the data range
@@ -80,7 +80,7 @@ func (st *SegmentTree) sumRange(L, R, l, r, rt int) int {
 	}
 
 	// the data range all in want range range
-	if L <= l && R <= r {
+	if L >= l && R <= r {
 		return st.sum[rt]
 	}
 
