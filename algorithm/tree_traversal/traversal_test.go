@@ -11,52 +11,35 @@ func TestTreeTraversal(t *testing.T) {
 
 	//pre-order traversal
 	preResult := []int{1, 2, 4, 6, 5, 7, 3}
-	testArray(ast, preResult, PreOrder(TestTree()))
-	testArray(ast, preResult, PreOrderNonRecursive(TestTree()))
+	ast.Equal(preResult, PreOrder(TestTree()))
+	ast.Equal(preResult, PreOrderNonRecursive(TestTree()))
 
 	//in-order traversal
 	inResult := []int{4, 6, 2, 7, 5, 1, 3}
-	testArray(ast, inResult, InOrder(TestTree()))
-	testArray(ast, inResult, InOrderNonRecursive(TestTree()))
+	ast.Equal(inResult, InOrder(TestTree()))
+	ast.Equal(inResult, InOrderNonRecursive(TestTree()))
+	ast.Equal(inResult, InOrderTravel(TestTree()))
 
 	//post-order traversal
 	postResult := []int{6, 4, 7, 5, 2, 3, 1}
-	testArray(ast, postResult, PostOrder(TestTree()))
-	testArray(ast, postResult, PostOrderNonRecursive(TestTree()))
+	ast.Equal(postResult, PostOrder(TestTree()))
+	ast.Equal(postResult, PostOrderNonRecursive(TestTree()))
 
 	//BFS
 	bfsResult := []int{1, 2, 3, 4, 5, 6, 7}
-	testArray(ast, bfsResult, LevelTraversal(TestTree()))
+	ast.Equal(bfsResult, LevelTraversal(TestTree()))
 
-	//dfs pre-order traversal but return the bfs [][]int result
-	bfsResults := [][]int{
+	//use dfs pre-order traversal and return the bfs []int result
+	bfsResultWithNull := []int{1, 2, 3, 4, 5, 0, 0, 0, 6, 7}
+	ast.Equal(bfsResultWithNull, LevelTraversalWithNull(TestTree()))
+
+	// use dfs pre-order traversal and return the bfs [][]int result without null
+	bfsResultWithoutNull := [][]int{
 		{1},
 		{2, 3},
 		{4, 5},
 		{6, 7},
 	}
-	testArrays(ast, bfsResults, LevelTraversal2(TestTree()))
-
-}
-
-func testArray(ast *assert.Assertions, array1 []int, array2 []int) {
-	if !ast.Equal(len(array1), len(array2)) {
-		return
-	}
-
-	for i := 0; i < len(array1); i++ {
-		ast.Equal(array1[i], array2[i])
-	}
-
-}
-
-func testArrays(ast *assert.Assertions, array1 [][]int, array2 [][]int) {
-	if !ast.Equal(len(array1), len(array2)) {
-		return
-	}
-
-	for i := 0; i < len(array1); i++ {
-		testArray(ast, array1[i], array2[i])
-	}
+	ast.Equal(bfsResultWithoutNull, LevelTraversalWithoutNull(TestTree()))
 
 }

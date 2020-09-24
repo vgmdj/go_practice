@@ -16,6 +16,23 @@ func InOrder(root *Tree) []int {
 
 }
 
+func InOrderTravel(root *Tree) []int {
+	result := make([]int, 0)
+	InOrderHelper(root, &result)
+	return result
+}
+
+func InOrderHelper(root *Tree, result *[]int) {
+	if root == nil {
+		return
+	}
+
+	InOrderHelper(root.Left, result)
+	*result = append(*result, root.Val)
+	InOrderHelper(root.Right, result)
+
+}
+
 func InOrderNonRecursive(root *Tree) []int {
 	var result []int
 	if root == nil {
@@ -32,7 +49,7 @@ func InOrderNonRecursive(root *Tree) []int {
 
 		}
 
-		if stack.Len()  != 0 {
+		if stack.Len() != 0 {
 			node := stack.Back()
 			stack.Remove(node)
 

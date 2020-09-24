@@ -29,33 +29,60 @@ func LevelTraversal(root *Tree) []int {
 
 }
 
-func LevelTraversal2(root *Tree) [][]int {
-	var result [][]int
+func LevelTraversalWithoutNull(root *Tree) [][]int {
+	result := make([][]int, 0)
 
 	if root == nil {
 		return result
 	}
 
-	dfsHelper(&result, root, 0)
+	dfsWithoutNullHelper(&result, root, 0)
 
 	return result
 
 }
 
-func dfsHelper(result *[][]int, root *Tree, level int) {
+func dfsWithoutNullHelper(result *[][]int, root *Tree, index int) {
 	if root == nil {
 		return
 	}
 
-	if len(*result) < level+1 {
-		*result = append(*result, []int{root.Val})
-
-	} else {
-		(*result)[level] = append((*result)[level], root.Val)
-
+	if len(*result) < index+1 {
+		*result = append(*result, make([]int, 0))
 	}
 
-	dfsHelper(result, root.Left, level+1)
-	dfsHelper(result, root.Right, level+1)
+	(*result)[index] = append((*result)[index], root.Val)
+
+	dfsWithoutNullHelper(result, root.Left, index+1)
+	dfsWithoutNullHelper(result, root.Right, index+1)
+
+}
+
+func LevelTraversalWithNull(root *Tree) []int {
+	result := make([]int, 0)
+
+	if root == nil {
+		return result
+	}
+
+	dfsWithNullHelper(&result, root, 0)
+
+	return result
+
+}
+
+func dfsWithNullHelper(result *[]int, root *Tree, index int) {
+	if root == nil {
+		return
+	}
+
+	if len(*result) < index+1 {
+		*result = append(*result, make([]int, index+1-len(*result))...)
+	}
+
+	(*result)[index] = root.Val
+
+	dfsWithNullHelper(result, root.Left, index*2+1)
+	dfsWithNullHelper(result, root.Right, index*2+2)
 
 }
