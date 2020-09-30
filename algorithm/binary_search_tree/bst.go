@@ -125,8 +125,11 @@ func (root *BinarySearchTree) removeNodeHelper(val int) *BinarySearchTree {
 
 	} else {
 		successor := root.right.MinNode()
+		root.right = root.right.RemoveMinNode()
 		successor.left = root.left
-		return root.right
+		successor.right = root.right
+
+		return successor
 	}
 
 }
@@ -159,6 +162,20 @@ func (root *BinarySearchTree) MinNode() *BinarySearchTree {
 	return root.left.MinNode()
 }
 
+func (root *BinarySearchTree) RemoveMinNode() *BinarySearchTree {
+	if root == nil {
+		return root
+	}
+
+	if root.left == nil {
+		return root.right
+	}
+
+	root.left = root.left.RemoveMinNode()
+	return root
+
+}
+
 func (root *BinarySearchTree) MaxNode() *BinarySearchTree {
 	if root == nil {
 		return nil
@@ -169,4 +186,17 @@ func (root *BinarySearchTree) MaxNode() *BinarySearchTree {
 	}
 
 	return root.right.MaxNode()
+}
+
+func (root *BinarySearchTree) RemoveMaxNode() *BinarySearchTree {
+	if root == nil {
+		return root
+	}
+
+	if root.right == nil {
+		return root.left
+	}
+
+	root.right = root.right.RemoveMaxNode()
+	return root
 }

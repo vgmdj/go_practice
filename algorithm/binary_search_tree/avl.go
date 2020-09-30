@@ -17,6 +17,31 @@ func (root *AVLTree) getHeight() int {
 	return root.height
 }
 
+func (root *AVLTree) searchNodeAndParent(val int) (*AVLTree, *AVLTree) {
+	c := root
+	p := &AVLTree{
+		data: math.MaxInt32,
+		left: c,
+	}
+
+	for c != nil {
+		if c.data == val {
+			break
+		}
+		p = c
+
+		if c.data < val {
+			c = c.left
+
+		} else {
+			c = c.right
+		}
+
+	}
+
+	return p, c
+}
+
 func (root *AVLTree) addNode(val int) *AVLTree {
 	if root == nil {
 		return &AVLTree{
@@ -39,27 +64,7 @@ func (root *AVLTree) addNode(val int) *AVLTree {
 }
 
 func (root *AVLTree) removeNode(val int) *AVLTree {
-	c := root
-	p := &AVLTree{
-		data: math.MaxInt32,
-		left: c,
-	}
-
-	for c != nil {
-		if c.data == val {
-			break
-		}
-		p = c
-
-		if c.data < val {
-			c = c.left
-
-		} else {
-			c = c.right
-		}
-
-	}
-
+	p, c := root.searchNodeAndParent(val)
 	if c == nil {
 		return root
 	}
@@ -86,9 +91,6 @@ func (root *AVLTree) removeNode(val int) *AVLTree {
 
 		}
 		successor = lmax
-
-
-
 
 	}
 

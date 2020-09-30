@@ -70,20 +70,6 @@ func TestBstRemove(t *testing.T) {
 
 }
 
-func TestBstRemoveRecursive(t *testing.T) {
-	ast := assert.New(t)
-	bst := testBstTree()
-	bst.RemoveRecursive(48)
-	bst.RemoveRecursive(25)
-	ast.Equal([]int{50, 37, 75, 30, 0, 63, 100, 12, 0, 0, 0, 0, 70, 0, 0, 6, 20}, bst.ToArray())
-	ast.Equal(true, bst.IsBst())
-
-	bst.RemoveRecursive(50)
-	ast.Equal([]int{75, 63, 100, 37, 70, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 20}, bst.ToArray())
-	ast.Equal(true, bst.IsBst())
-
-}
-
 func TestMinNode(t *testing.T) {
 	ast := assert.New(t)
 	bst := testBstTree()
