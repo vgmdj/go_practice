@@ -1,7 +1,5 @@
 package binary_search_tree
 
-import "math"
-
 type AVLTree struct {
 	data   int
 	left   *AVLTree
@@ -17,29 +15,25 @@ func (root *AVLTree) getHeight() int {
 	return root.height
 }
 
-func (root *AVLTree) searchNodeAndParent(val int) (*AVLTree, *AVLTree) {
-	c := root
-	p := &AVLTree{
-		data: math.MaxInt32,
-		left: c,
-	}
+func (root *AVLTree) searchNodeAndParent(val int) (c *AVLTree, p *AVLTree) {
+	c = root
 
 	for c != nil {
 		if c.data == val {
-			break
+			return c, p
 		}
 		p = c
 
 		if c.data < val {
-			c = c.left
+			c = c.right
 
 		} else {
-			c = c.right
+			c = c.left
 		}
 
 	}
 
-	return p, c
+	return c, p
 }
 
 func (root *AVLTree) addNode(val int) *AVLTree {
@@ -64,7 +58,7 @@ func (root *AVLTree) addNode(val int) *AVLTree {
 }
 
 func (root *AVLTree) removeNode(val int) *AVLTree {
-	p, c := root.searchNodeAndParent(val)
+	c, p := root.searchNodeAndParent(val)
 	if c == nil {
 		return root
 	}
@@ -77,27 +71,63 @@ func (root *AVLTree) removeNode(val int) *AVLTree {
 		successor = c.left
 
 	} else {
+		// find the left's max child node
 		lp, lmax := c, c.left
 		for lmax.right != nil {
 			lp = lmax
 			lmax = lmax.right
 		}
 
+		// delete the left's max child node
 		if lp.left == lmax {
-			lp.left = nil
+			lp.left = lmax.left
 
 		} else {
-			lp.right = nil
+			lp.right = lmax.right
 
 		}
+
 		successor = lmax
+		successor.left = c.left
+		successor.right = c.right
+
+	}
+
+	if p == nil {
+		return successor
+	}
+
+	if p.left == c {
+		p.left = successor
+
+	} else {
+		p.right = successor
 
 	}
 
 	return root
 }
 
+func (root *AVLTree) resetHeight(val int) {
+	if root == nil || root.data == val {
+		return
+	}
+
+	root.height = max(root.left.getHeight(), root.right.getHeight()) + 1
+
+	if val > root.data {
+		root.right.resetHeight(val)
+		return
+	}
+
+	root.left.resetHeight(val)
+
+}
+
 func (root *AVLTree) keepBalance() *AVLTree {
+	if root == nil {
+		return root
+	}
 
 	left, right := root.left, root.right
 	if left.getHeight()-right.getHeight() >= 2 {

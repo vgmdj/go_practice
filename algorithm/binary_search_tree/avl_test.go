@@ -4,11 +4,14 @@ import "testing"
 
 func TestAVLKeepBalance(t *testing.T) {
 	avl := NewAVLHelper()
-	avl.AddNode(1)
-	avl.AddNode(2)
-	avl.AddNode(3)
-	avl.AddNode(4)
-	avl.AddNode(5)
+	avl.AddNode(100)
+	avl.AddNode(200)
+	avl.AddNode(300)
+	avl.AddNode(400)
+	avl.AddNode(500)
+	avl.RemoveNode(400)
+	avl.AddNode(250)
+	avl.AddNode(275)
 	t.Log(levelTravel(avl.GetAVLTree()))
 
 }
