@@ -1,319 +1,221 @@
 package binary_search_tree
 
-
-/*
-二叉搜索树 ： 从根结点向下查询，若是结点值比目标值小，顺着左子树继续查找，反之顺着右子树继续查找。
-
-插入：也是按照规则，从根结点开始，一直查询到空位置进行插入
-
-复杂度 o(lg n) : n代表树中结点的个数 （平衡二叉树的情况）
-
-
-
-AVL 树 ：特殊类型的二叉树，每个结点保存一份额外的信息：结点的平衡因子.结点左子树的高度减去右子树的高度。
-插入结点时avl树通过自我调整，使平衡因子始终保持在 +1，-1，0。该过程称为旋转
-
-设 x 为刚插入AVL树的结点，设A为离x最近的且平衡因子更改为+-2的结点，
-
-
-当 x 位于A的左子树的左子树上时，进行 LL 旋转
-   left为A的左子树（+1），
-
-   将A的左指针指向left的右子结点，left的右指针指向A，将原来指向A的指针指向left。 平衡因子（left ：0，A：0）
-
-
-当 x 位于A的左子树的右子树上时，执行 LR 旋转
-  left为A的左子树（-1） ，并设A的子孙结点grandchild为left的右子结点。
-
-left的右子节点指向grandchild的左子结点，（left结点变为0或不变）
-grandchild的左子结点指向left，
-A的左子结点指向grandchild的右子结点，（A变为0或-1）（此时A的层数于left层数相同）
-grandchild的右子结点指向A，（grandchild为0）
-将原指向A的指针指向grandchild。
-
-
-
-
-//互为对称
-
-
-当 x 位于A的右子树的左子树上时，执行 RR 旋转
-   right为A的右子树（+1）
-
-  将A的右指针指向right的左子结点，right的左指针指向A，将原来指向A的指针指向right。 平衡因子（left ：0，A：0）
-
-
-当 x 位于A的右子树的右子树上时，执行 RL 旋转
-  right为A的左子树（-1） ，并设A的子孙结点grandchild为right的左子结点。
-
-right的左子节点指向grandchild的右子结点，（left结点变为0或不变）
-grandchild的右子结点指向right，
-A的右子结点指向grandchild的左子结点，（A变为0或-1）（此时A的层数于left层数相同）
-grandchild的左子结点指向A，（grandchild为0）
-将原指向A的指针指向grandchild。
-
-*/
-
-const (
-	AVL_LEFT_HEAVY  = 1
-	AVL_BALANCE     = 0
-	AVL_RIGHT_HEAVY = -1
-)
-
-type BisTree BiTree
-
-type AvlNode struct {
-	data interface{}
-	//用来标识结点是否已经处于删除状态 false 表示存在 true 表示已删除
-	hidden bool
-	//该结点的平衡因子
-	factor int
+type AVLTree struct {
+	data   int
+	left   *AVLTree
+	right  *AVLTree
+	height int
 }
 
-//BiTreeNode的data为AvlNode结点
+func (root *AVLTree) getHeight() int {
+	if root == nil {
+		return 0
+	}
 
-//node为指向A的指针 注意是**
-func Rorate_left(node **BiTreeNode) {
-	var left, grandchild *BiTreeNode
+	return root.height
+}
 
-	left = (*node).left
+func (root *AVLTree) searchNodeAndParent(val int) (c *AVLTree, p *AVLTree) {
+	c = root
 
-	//LL
-	if (left.data.(*AvlNode).factor == AVL_LEFT_HEAVY) {
-		(*node).left = left.right
-		left.right = *node
-
-		left.data.(*AvlNode).factor = AVL_BALANCE
-		(*node).data.(*AvlNode).factor = AVL_BALANCE
-		*node = left
-	} else { //LR
-		grandchild = left.right
-		left.right = grandchild.left
-		grandchild.left = left
-		(*node).left = grandchild.right
-		grandchild.right = (*node)
-
-		switch grandchild.data.(*AvlNode).factor {
-		case AVL_LEFT_HEAVY:
-			left.data.(*AvlNode).factor = AVL_BALANCE
-			(*node).data.(*AvlNode).factor = AVL_RIGHT_HEAVY
-		case AVL_BALANCE:
-			left.data.(*AvlNode).factor = AVL_BALANCE
-			(*node).data.(*AvlNode).factor = AVL_BALANCE
-		case AVL_RIGHT_HEAVY:
-			left.data.(*AvlNode).factor = AVL_LEFT_HEAVY
-			(*node).data.(*AvlNode).factor = AVL_BALANCE
+	for c != nil {
+		if c.data == val {
+			return c, p
 		}
+		p = c
 
-		grandchild.data.(*AvlNode).factor = AVL_BALANCE
-		*node = grandchild
-	}
-}
+		if c.data < val {
+			c = c.right
 
-//互为镜像: node为指向A的指针 注意是**
-func Rorate_right(node **BiTreeNode) {
-	var right, grandchild *BiTreeNode
-
-	right = (*node).right
-
-	//RR
-	if (right.data.(*AvlNode).factor == AVL_RIGHT_HEAVY) {
-		(*node).right = right.left
-		right.right = *node
-
-		right.data.(*AvlNode).factor = AVL_BALANCE
-		(*node).data.(*AvlNode).factor = AVL_BALANCE
-		*node = right
-	} else { //RL
-		grandchild = right.right
-		right.left = grandchild.right
-		grandchild.right = right
-		(*node).right = grandchild.left
-		grandchild.left = (*node)
-
-		switch grandchild.data.(*AvlNode).factor {
-		case AVL_LEFT_HEAVY:
-			right.data.(*AvlNode).factor = AVL_RIGHT_HEAVY
-			(*node).data.(*AvlNode).factor = AVL_BALANCE
-		case AVL_BALANCE:
-			right.data.(*AvlNode).factor = AVL_BALANCE
-			(*node).data.(*AvlNode).factor = AVL_BALANCE
-		case AVL_RIGHT_HEAVY:
-			right.data.(*AvlNode).factor = AVL_BALANCE
-			(*node).data.(*AvlNode).factor = AVL_LEFT_HEAVY
-		}
-
-		grandchild.data.(*AvlNode).factor = AVL_BALANCE
-		*node = grandchild
-	}
-}
-
-//销毁某个结点下方的左子树
-func Destory_left(bs *BisTree, node *BiTreeNode) {
-	var pos *BiTreeNode
-
-	if bs.size == 0 {
-		return
-	}
-
-	if node == nil {
-		pos = bs.root
-	} else {
-		pos = node.left
-	}
-
-	if pos != nil {
-		Destory_left(bs, pos)
-		Destory_right(bs, pos)
-		bs.size--
-	}
-}
-
-//销毁某个结点下方的右子树
-func Destory_right(bs *BisTree, node *BiTreeNode) {
-	var pos **BiTreeNode
-
-	if bs.size == 0 {
-		return
-	}
-
-	if node == nil {
-		pos = &bs.root
-	} else {
-		pos = &node.right
-	}
-
-	if *pos != nil {
-		Destory_left(bs, *pos)
-		Destory_right(bs, *pos)
-		*pos = nil
-		bs.size--
-	}
-}
-
-//AVL树的插入 node为A结点
-func Insert(tree *BiTree, node **BiTreeNode, data interface{}, balanced *bool) {
-	var avlNode *AvlNode
-
-	if (*node).Is_eob() {
-		avlNode = new(AvlNode)
-		avlNode.data = data
-		avlNode.factor = AVL_BALANCE
-		avlNode.hidden = false
-		tree.Ins_left(*node, avlNode)
-		return
-	} else {
-
-		var cmpval int
-
-		//值大于当前结点值
-		cmpval = tree.compare(data, (*node).data.(*AvlNode).data)
-
-		//放入到左子树中
-		if cmpval < 0 {
-			if (*node).left.Is_eob() {
-				avlNode = new(AvlNode)
-				avlNode.data = data
-				avlNode.factor = AVL_BALANCE
-				avlNode.hidden = false
-				tree.Ins_left(*node, avlNode)
-				*balanced = false
-			} else {
-				//以左结点为根做递归插入
-				Insert(tree, &(*node).left, data, balanced)
-			}
-
-			if !(*balanced) {
-				switch (*node).data.(*AvlNode).factor {
-				case AVL_LEFT_HEAVY:
-					Rorate_left(node)
-					*balanced = true
-				case AVL_BALANCE:
-					(*node).data.(*AvlNode).factor = AVL_LEFT_HEAVY
-				case AVL_RIGHT_HEAVY:
-					(*node).data.(*AvlNode).factor = AVL_BALANCE
-					*balanced = true
-				}
-
-			}
-
-		} else if cmpval > 0 { //插入到右子树中
-			if (*node).right.Is_eob() {
-				avlNode = new(AvlNode)
-				avlNode.data = data
-				avlNode.factor = AVL_BALANCE
-				avlNode.hidden = false
-				tree.Ins_right(*node, avlNode)
-				*balanced = false
-			} else {
-				//以左结点为根做递归插入
-				Insert(tree, &(*node).right, data, balanced)
-			}
-
-			if !(*balanced) {
-				switch (*node).data.(*AvlNode).factor {
-				case AVL_LEFT_HEAVY:
-					(*node).data.(*AvlNode).factor = AVL_BALANCE
-					*balanced = true
-				case AVL_BALANCE:
-					(*node).data.(*AvlNode).factor = AVL_RIGHT_HEAVY
-				case AVL_RIGHT_HEAVY:
-					Rorate_right(node)
-					*balanced = true
-				}
-			}
 		} else {
-			//数据存在
-			if !(*node).data.(*AvlNode).hidden {
-				return
-			} else { //数据状态修改为为删除
-				(*node).data.(*AvlNode).hidden = false
-				*balanced = true
-			}
+			c = c.left
 		}
+
 	}
+
+	return c, p
 }
 
-//从node开始查找 删除结点为data的结点
-func Hide(tree *BisTree, node *BiTreeNode, data interface{}) {
-	var cmpval int
-	if node.Is_eob() {
+func (root *AVLTree) addNode(val int) *AVLTree {
+	if root == nil {
+		return &AVLTree{
+			data:   val,
+			height: 1,
+		}
+	}
+
+	if root.data < val {
+		root.right = root.right.addNode(val)
+
+	} else if root.data > val {
+		root.left = root.left.addNode(val)
+
+	}
+
+	root.height = max(root.left.getHeight(), root.right.getHeight()) + 1
+	return root
+
+}
+
+func (root *AVLTree) removeNode(val int) *AVLTree {
+	c, p := root.searchNodeAndParent(val)
+	if c == nil {
+		return root
+	}
+
+	successor := new(AVLTree)
+	if c.left == nil {
+		successor = c.right
+
+	} else if c.right == nil {
+		successor = c.left
+
+	} else {
+		// find the left's max child node
+		lp, lmax := c, c.left
+		for lmax.right != nil {
+			lp = lmax
+			lmax = lmax.right
+		}
+
+		// delete the left's max child node
+		if lp.left == lmax {
+			lp.left = lmax.left
+
+		} else {
+			lp.right = lmax.right
+
+		}
+
+		successor = lmax
+		successor.left = c.left
+		successor.right = c.right
+
+	}
+
+	if p == nil {
+		return successor
+	}
+
+	if p.left == c {
+		p.left = successor
+
+	} else {
+		p.right = successor
+
+	}
+
+	return root
+}
+
+func (root *AVLTree) resetHeight(val int) {
+	if root == nil || root.data == val {
 		return
 	}
 
-	cmpval = tree.compare(data, (*node).data.(*AvlNode).data)
+	root.height = max(root.left.getHeight(), root.right.getHeight()) + 1
 
-	if cmpval < 0 {
-		Hide(tree, node.left, data)
-	} else if cmpval > 0 {
-		Hide(tree, node.right, data)
-	} else {
-		(*node).data.(*AvlNode).hidden = true
+	if val > root.data {
+		root.right.resetHeight(val)
+		return
 	}
 
-	return
+	root.left.resetHeight(val)
+
 }
 
-func Lookup(tree *BisTree, node *BiTreeNode, data interface{}) int {
-	var cmpval, retval int
-	if node.Is_eob() {
-		return -1
+func (root *AVLTree) keepBalance() *AVLTree {
+	if root == nil {
+		return root
 	}
 
-	cmpval = tree.compare(data, (*node).data.(*AvlNode).data)
+	left, right := root.left, root.right
+	if left.getHeight()-right.getHeight() >= 2 {
+		if left.left.getHeight() > left.right.getHeight() {
+			return root.rightRotate()
 
-	if cmpval < 0 {
-		retval = Lookup(tree, node.left, data)
-	} else if cmpval > 0 {
-		retval = Lookup(tree, node.right, data)
-	} else {
-		if !(*node).data.(*AvlNode).hidden {
-			data = (*node).data.(*AvlNode).data
-			retval = 0
 		} else {
-			return -1
+			return root.leftRightRotate()
+
 		}
+
 	}
 
-	return retval
+	if right.getHeight()-left.getHeight() >= 2 {
+		if right.right.getHeight() > right.left.getHeight() {
+			return root.leftRotate()
+
+		} else {
+			return root.rightLeftRotate()
+
+		}
+
+	}
+
+	return root
+
+}
+
+func (root *AVLTree) leftRotate() *AVLTree {
+	right := root.right
+	root.right = right.left
+	right.left = root
+
+	root.height = max(root.left.getHeight(), root.right.getHeight()) + 1
+	right.height = max(right.left.getHeight(), right.right.getHeight()) + 1
+
+	return right
+
+}
+
+func (root *AVLTree) rightRotate() *AVLTree {
+	left := root.left
+	root.left = left.right
+	left.right = root
+
+	root.height = max(root.left.getHeight(), root.right.getHeight()) + 1
+	left.height = max(left.left.getHeight(), left.right.getHeight()) + 1
+
+	return left
+}
+
+func (root *AVLTree) leftRightRotate() *AVLTree {
+	root.left = root.left.leftRotate()
+	return root.rightRotate()
+}
+
+func (root *AVLTree) rightLeftRotate() *AVLTree {
+	root.right = root.right.rightRotate()
+	return root.leftRotate()
+}
+
+type AVLHelper struct {
+	root *AVLTree
+}
+
+func NewAVLHelper() *AVLHelper {
+	return &AVLHelper{}
+}
+
+func (h *AVLHelper) GetAVLTree() *AVLTree {
+	return h.root
+
+}
+
+func (h *AVLHelper) AddNode(val int) {
+	h.root = h.root.addNode(val)
+	h.root = h.root.keepBalance()
+}
+
+func (h *AVLHelper) RemoveNode(val int) {
+	h.root = h.root.removeNode(val)
+	h.root = h.root.keepBalance()
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+
+	return b
 }
