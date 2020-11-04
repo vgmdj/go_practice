@@ -13,46 +13,49 @@ func insert(intervals [][]int, newInterval []int) [][]int {
 		return append(intervals, newInterval)
 	}
 
-	// 先将 newInterval 与 intervals 合并
-	i := 0
-	for ; i < len(intervals); i++ {
-		// 如查新区间的头比此区间的尾要大，则新区间一定在此区间之间
-		if newInterval[0] > intervals[i][1] {
-			continue
+	index := 0
+	result := make([][]int, 0)
+	left, right := 0, len(intervals)-1
+	for left <= right {
+		mid := (left + right) / 2
+		if intervals[mid][0] < newInterval[0] {
+			left = mid + 1
+
+		} else {
+			right = mid - 1
+
 		}
-
-		// 如果新区间的头比此区间的尾要小，且尾比此区间头要小，则要插入新区间 [4，6]  [1 2 3 4 5, 3 4 5 6 7]
-		if newInterval[1] < intervals[i][0] {
-			intervals = append(intervals, []int{})
-			copy(intervals[i+1:], intervals[i:])
-			intervals[i] = newInterval
-			break
-		}
-
-		// 否则将新区间合并进来
-		intervals[i] = []int{Min(intervals[i][0], newInterval[0]),
-			Max(intervals[i][1], newInterval[1])}
-
-		break
-	}
-
-	// 将问题转化成 对i 及其后部分进行区间合并，与上题区别在于原区间数组无重叠
-	tail := i
-	for i = i + 1; i < len(intervals); i++ {
-		// 如果 intervals[i]的头大于  intervals[tail]的尾,则将 i及后面的部分对 tail 后的部分进行替换
-		if intervals[i][0] > intervals[tail][1] {
-			if i != tail+1 {
-				copy(intervals[tail+1:], intervals[i:])
-			}
-			return intervals[:tail+len(intervals)-i+1]
-		}
-
-		intervals[tail] = []int{Min(intervals[tail][0], intervals[i][0]),
-			Max(intervals[tail][1], intervals[i][1])}
 
 	}
 
-	return intervals[:tail+1]
+	index = right + 1
+	result = append(result, intervals[:index]...)
+
+	insertInterval(&result, newInterval)
+
+	for index < len(intervals) {
+		insertInterval(&result, intervals[index])
+		index++
+	}
+
+	return result
+
+}
+
+func insertInterval(result *[][]int, interval []int) {
+	if len(*result) == 0 {
+		*result = append(*result, interval)
+		return
+	}
+
+	last := &(*result)[len(*result)-1]
+	if interval[0] > (*last)[1] {
+		*result = append(*result, interval)
+		return
+	}
+
+	(*last)[0] = Min((*last)[0], interval[0])
+	(*last)[1] = Max((*last)[1], interval[1])
 
 }
 

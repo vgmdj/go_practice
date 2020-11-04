@@ -17,6 +17,14 @@ func Test_insert(t *testing.T) {
 	}{
 		// TODO: Add test cases.
 		{
+			"case",
+			args{
+				[][]int{{0, 10}, {14, 14}, {15, 20}},
+				[]int{11, 11},
+			},
+			[][]int{{0, 10}, {11, 11}, {14, 14}, {15, 20}},
+		},
+		{
 			"case1",
 			args{
 				[][]int{},
