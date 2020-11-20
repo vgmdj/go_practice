@@ -1,7 +1,33 @@
 package Longest_Palindromic_Substring
 
-//中心点枚举 O(n^2)的时间复杂度
 func longestPalindrome(s string) string {
+	var result string
+	maxLength := 0
+	dp := make([][]bool, len(s))
+	for i := range dp {
+		dp[i] = make([]bool, len(s))
+	}
+
+	for i := len(s) - 1; i >= 0; i-- {
+		for j := i; j < len(s); j++ {
+			if i != j && (s[i] != s[j] || (j-i != 1 && !dp[i+1][j-1])) {
+				continue
+			}
+
+			dp[i][j] = true
+
+			if j-i+1 > maxLength {
+				maxLength = j - i + 1
+				result = s[i : j+1]
+			}
+
+		}
+	}
+
+	return result
+}
+
+func longestPalindrome2(s string) string {
 	if len(s) <= 1 {
 		return s
 	}
