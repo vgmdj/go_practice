@@ -19,6 +19,7 @@ func TestTreeTraversal(t *testing.T) {
 	ast.Equal(inResult, InOrder(TestTree()))
 	ast.Equal(inResult, InOrderNonRecursive(TestTree()))
 	ast.Equal(inResult, InOrderTravel(TestTree()))
+	ast.Equal(inResult, morris(TestTree()))
 
 	//post-order traversal
 	postResult := []int{6, 4, 7, 5, 2, 3, 1}
