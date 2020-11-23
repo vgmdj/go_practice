@@ -1,7 +1,6 @@
 package Kth_Largest_Element_in_an_Array
 
 import (
-	"math"
 	"sort"
 )
 
@@ -31,37 +30,37 @@ func findKthLargest2(nums []int, k int) int {
 
 //快排
 func findKthLargest3(nums []int, k int) int {
-	if len(nums) < 1 {
-		return math.MinInt32
+	return quickSelect(nums, 0, len(nums)-1, len(nums)-k)
+}
+
+func quickSelect(nums []int, l, r, index int) int {
+	p := partition(nums, l, r)
+	if p == index {
+		return nums[index]
 	}
 
-	head, tail := 0, len(nums)-1
-	mid, next := nums[0], 1
+	if p < index {
+		return quickSelect(nums, p+1, r, index)
+	}
 
-	for head < tail {
-		if nums[next] > mid {
-			nums[next], nums[tail] = nums[tail], nums[next]
-			tail--
+	return quickSelect(nums, l, p-1, index)
+}
 
-		} else {
-			nums[next], nums[head] = nums[head], nums[next]
-			head++
+func partition(nums []int, l, r int) int {
+	pivot, next := nums[l], l+1
+	for l < r {
+		if pivot > nums[next] {
+			nums[l], nums[next] = nums[next], nums[l]
+			l++
 			next++
+		} else {
+			nums[r], nums[next] = nums[next], nums[r]
+			r--
 
 		}
-
 	}
 
-	if head < len(nums)-k {
-		return findKthLargest3(nums[next:], k)
-	}
-
-	if head == len(nums)-k {
-		return nums[next-1]
-	}
-
-	return findKthLargest3(nums[:next-1], k+head-len(nums))
-
+	return next - 1
 }
 
 //大根堆排
