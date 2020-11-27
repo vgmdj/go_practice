@@ -3,47 +3,46 @@ package sort
 import "math"
 
 func RadixSort(nums []int) {
-	base, length := 1, getLen(nums)
+	if len(nums) < 2 {
+		return
+	}
 
-	for i := 1; i <= length; i++ {
-		radixSort(nums, base)
-		base *= 10
+	maxValue := max(nums...)
+	buf := make([]int, len(nums))
+	for base := 1; base <= maxValue; base *= 10 {
+		cnt := [10]int{}
+		for _, v := range nums {
+			c := v / base % 10
+			cnt[c]++
+		}
+
+		for i := 1; i < len(cnt); i++ {
+			cnt[i] += cnt[i-1]
+		}
+
+		for i := len(nums) - 1; i >= 0; i-- {
+			c := nums[i] / base % 10
+			buf[cnt[c]-1] = nums[i]
+			cnt[c]--
+		}
+
+		copy(nums, buf)
 	}
 
 }
 
-func getLen(nums []int) int {
-	max, length := math.MinInt32, 0
+func max(nums ...int) int {
+	if len(nums) == 0 {
+		return math.MinInt32
+	}
 
+	maxValue := nums[0]
 	for _, v := range nums {
-		if v > max {
-			max = v
+		if v > maxValue {
+			maxValue = v
+
 		}
 	}
 
-	for max != 0 {
-		max /= 10
-		length++
-	}
-
-	return length
-}
-
-func radixSort(nums []int, base int) {
-	bucket := make([][]int, 10)
-
-	for _, v := range nums {
-		k := v / base % 10
-		bucket[k] = append(bucket[k], v)
-
-	}
-
-	index := 0
-	for _, group := range bucket {
-		for _, v := range group {
-			nums[index] = v
-			index++
-		}
-	}
-
+	return maxValue
 }
