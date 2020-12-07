@@ -1,38 +1,43 @@
 package Reorganize_String
 
-func reorganizeString(s string) string {
-	n := len(s)
+func reorganizeString(S string) string {
+	n := len(S)
 	if n <= 1 {
-		return s
+		return S
 	}
 
-	cnt := [26]int{}
 	maxCnt := 0
-	for _, ch := range s {
-		ch -= 'a'
-		cnt[ch]++
-		if cnt[ch] > maxCnt {
-			maxCnt = cnt[ch]
+	cnt := [26]int{}
+	for _, c := range S {
+		cnt[c-'a']++
+		if cnt[c-'a'] > maxCnt {
+			maxCnt = cnt[c-'a']
 		}
 	}
+
 	if maxCnt > (n+1)/2 {
 		return ""
 	}
 
-	ans := make([]byte, n)
-	evenIdx, oddIdx, halfLen := 0, 1, n/2
-	for i, c := range cnt[:] {
-		ch := byte('a' + i)
-		for c > 0 && c <= halfLen && oddIdx < n {
-			ans[oddIdx] = ch
+	result := make([]byte, n)
+	oddIndex, evenIndex, halfLen := 1, 0, n/2
+	for i, c := range cnt {
+		b := byte('a' + i)
+		for c > 0 && c <= halfLen && oddIndex < n {
+			result[oddIndex] = b
 			c--
-			oddIdx += 2
+			oddIndex += 2
 		}
+
 		for c > 0 {
-			ans[evenIdx] = ch
+			result[evenIndex] = b
 			c--
-			evenIdx += 2
+			evenIndex += 2
+
 		}
+
 	}
-	return string(ans)
+
+	return string(result)
+
 }
