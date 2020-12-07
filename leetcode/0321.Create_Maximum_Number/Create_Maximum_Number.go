@@ -1,50 +1,74 @@
 package Create_Maximum_Number
 
-func maxSubsequence(a []int, k int) (s []int) {
-    for i, v := range a {
-        for len(s) > 0 && len(s)+len(a)-1-i >= k && v > s[len(s)-1] {
-            s = s[:len(s)-1]
-        }
-        if len(s) < k {
-            s = append(s, v)
-        }
-    }
-    return
+func maxNumber(nums1 []int, nums2 []int, k int) []int {
+	start := 0
+	if k > len(nums2) {
+		start = k - len(nums2)
+	}
+
+	result := make([]int, 0)
+	for i := start; i <= k && i <= len(nums1); i++ {
+		s1 := maxSubSequence(nums1, i)
+		s2 := maxSubSequence(nums2, k-i)
+		mergedList := merge(s1, s2)
+		if numberListLess(result, mergedList) {
+			result = mergedList
+		}
+	}
+
+	return result
+
 }
 
-func lexicographicalLess(a, b []int) bool {
-    for i := 0; i < len(a) && i < len(b); i++ {
-        if a[i] != b[i] {
-            return a[i] < b[i]
-        }
-    }
-    return len(a) < len(b)
+func numberListLess(nums1, nums2 []int) bool {
+	for i := 0; i < len(nums1) && i < len(nums2); i++ {
+		if nums1[i] != nums2[i] {
+			return nums1[i] < nums2[i]
+		}
+	}
+
+	return len(nums1) < len(nums2)
 }
 
-func merge(a, b []int) []int {
-    merged := make([]int, len(a)+len(b))
-    for i := range merged {
-        if lexicographicalLess(a, b) {
-            merged[i], b = b[0], b[1:]
-        } else {
-            merged[i], a = a[0], a[1:]
-        }
-    }
-    return merged
+func merge(nums1, nums2 []int) []int {
+	result := make([]int, 0, len(nums1)+len(nums2))
+	index1, index2 := 0, 0
+	for i := 0; index1 < len(nums1) && index2 < len(nums2); i++ {
+		if numberListLess(nums1[index1:], nums2[index2:]) {
+			result = append(result, nums2[index2])
+			index2++
+
+		} else {
+			result = append(result, nums1[index1])
+			index1++
+
+		}
+	}
+
+	if index1 < len(nums1) {
+		result = append(result, nums1[index1:]...)
+	}
+
+	if index2 < len(nums2) {
+		result = append(result, nums2[index2:]...)
+	}
+
+	return result
+
 }
 
-func maxNumber(nums1, nums2 []int, k int) (res []int) {
-    start := 0
-    if k > len(nums2) {
-        start = k - len(nums2)
-    }
-    for i := start; i <= k && i <= len(nums1); i++ {
-        s1 := maxSubsequence(nums1, i)
-        s2 := maxSubsequence(nums2, k-i)
-        merged := merge(s1, s2)
-        if lexicographicalLess(res, merged) {
-            res = merged
-        }
-    }
-    return
+func maxSubSequence(nums []int, k int) []int {
+	result := make([]int, 0)
+	for i := 0; i < len(nums) && k > 0; i++ {
+		for len(result) > 0 && len(nums)+len(result)-i-1 >= k && nums[i] > result[len(result)-1] {
+			result = result[:len(result)-1]
+		}
+
+		if len(result) < k {
+			result = append(result, nums[i])
+		}
+
+	}
+
+	return result
 }
