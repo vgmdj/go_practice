@@ -3,66 +3,90 @@ package Word_Ladder_II
 import "math"
 
 func findLadders(beginWord string, endWord string, wordList []string) [][]string {
-	ids := map[string]int{}
-	for i, word := range wordList {
-		ids[word] = i
-	}
-	if _, ok := ids[beginWord]; !ok {
-		wordList = append(wordList, beginWord)
-		ids[beginWord] = len(wordList) - 1
-	}
-	if _, ok := ids[endWord]; !ok {
-		return [][]string{}
+
+	wordID := make(map[string]int, len(wordList)+1)
+	for i, c := range wordList {
+		wordID[c] = i
 	}
 
-	n := len(wordList)
+	if _, ok := wordID[endWord]; !ok {
+		return nil
+	}
+
+	if _, ok := wordID[beginWord]; !ok {
+		wordList = append(wordList, beginWord)
+		wordID[beginWord] = len(wordList) - 1
+	}
+
 	edges := make([][]int, len(wordList))
-	for i := 0; i < n; i++ {
-		for j := i + 1; j < n; j++ {
-			if transformCheck(wordList[i], wordList[j]) {
+	for i := 0; i < len(wordList); i++ {
+		for j := i + 1; j < len(wordList); j++ {
+			if canTransform(wordList[i], wordList[j]) {
 				edges[i] = append(edges[i], j)
 				edges[j] = append(edges[j], i)
 			}
 		}
 	}
-	res := [][]string{}
-	cost := make([]int, n)
-	queue := [][]int{[]int{ids[beginWord]}}
 
-	for i := 0; i < n; i++ {
-		cost[i] = math.MaxInt32
-	}
-	cost[ids[beginWord]] = 0
-
-	for i := 0; i < len(queue); i++ {
-		now := queue[i]
-		last := now[len(now)-1]
-		if last == ids[endWord] {
-			tmp := []string{}
-			for _, index := range now {
-				tmp = append(tmp, wordList[index])
-			}
-			res = append(res, tmp)
-		} else {
-			for _, to := range edges[last] {
-				if cost[last]+1 <= cost[to] {
-					cost[to] = cost[last] + 1
-					tmp := make([]int, len(now))
-					copy(tmp, now)
-					tmp = append(tmp, to)
-					queue = append(queue, tmp)
-				}
-			}
+	result := make([][]string, 0)
+	addResult := func(wordIndexList []int) {
+		words := make([]string, 0)
+		for _, wordIndex := range wordIndexList {
+			words = append(words, wordList[wordIndex])
 		}
+		result = append(result, words)
 	}
-	return res
+
+	dist := make([]int, len(wordList))
+	for i := range dist {
+		dist[i] = math.MaxInt32
+	}
+	dist[wordID[beginWord]] = 0
+
+	queue := [][]int{{wordID[beginWord]}}
+
+	for len(queue) != 0 {
+		bottom := queue[0]
+		lastWordID := bottom[len(bottom)-1]
+		queue = queue[1:]
+
+		if lastWordID == wordID[endWord] {
+			addResult(bottom)
+		}
+
+		for _, next := range edges[lastWordID] {
+			// not shortest
+			if dist[lastWordID]+1 > dist[next] {
+				continue
+			}
+
+			// can visit
+			dist[next] = dist[lastWordID] + 1
+			path := make([]int, len(bottom)+1)
+			copy(path, bottom)
+			path[len(path)-1] = next
+
+			queue = append(queue, path)
+
+		}
+
+	}
+
+	return result
+
 }
 
-func transformCheck(from, to string) bool {
-	for i := 0; i < len(from); i++ {
-		if from[i] != to[i] {
-			return from[i+1:] == to[i+1:]
+func canTransform(a, b string) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
+	for i := 0; i < len(a); i++ {
+		if a[i] != b[i] {
+			return a[i+1:] == b[i+1:]
 		}
 	}
-	return false
+
+	return true
+
 }

@@ -20,6 +20,17 @@ func Test_findLadders(t *testing.T) {
 		{
 			"case",
 			args{
+				beginWord: "a",
+				endWord:   "c",
+				wordList:  []string{"a", "b", "c"},
+			},
+			[][]string{
+				{"a", "c"},
+			},
+		},
+		{
+			"case",
+			args{
 				beginWord: "hit",
 				endWord:   "cog",
 				wordList:  []string{"hot", "dot", "dog", "lot", "log", "cog"},
