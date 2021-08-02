@@ -1,78 +1,80 @@
 package LRU_Cache
 
 type LRUCache2 struct {
-	head     *node
-	tail     *node
-	capacity int
-	selector map[int]*node
+	Head     *Node
+	Tail     *Node
+	Capacity int
+	selector map[int]*Node
 }
 
-type node struct {
-	previous *node
-	next     *node
-	key      int
-	value    int
-}
-
-func Constructor2(Capacity int) LRUCache2 {
-	head := &node{}
-	tail := &node{}
-
-	head.next = tail
-	tail.previous = head
+func Constructor2(capacity int) LRUCache2 {
+	head, tail := new(Node), new(Node)
+	head.Next = tail
+	tail.Prev = head
 
 	return LRUCache2{
-		head:     head,
-		tail:     tail,
-		capacity: Capacity,
-		selector: make(map[int]*node),
+		Head:     head,
+		Tail:     tail,
+		Capacity: capacity,
+		selector: make(map[int]*Node, 0),
 	}
+
 }
 
-func (l *LRUCache2) Get(key int) int {
-	n, ok := l.selector[key]
+func (this *LRUCache2) Get(key int) int {
+	n, ok := this.selector[key]
 	if !ok {
 		return -1
 	}
 
-	l.removeNode(n)
-	l.Put(key, n.value)
+	this.removeNode(n)
+	this.Put(key, n.Value)
 
-	return n.value
+	return n.Value
+
 }
 
-func (l *LRUCache2) Put(key, value int) {
-	n, ok := l.selector[key]
+func (this *LRUCache2) Put(key int, value int) {
+	n, ok := this.selector[key]
 	if ok {
-		l.removeNode(n)
-		l.Put(key, value)
-		return
+		this.removeNode(n)
 	}
 
-	n = &node{
-		previous: l.tail.previous,
-		next:     l.tail,
-		key:      key,
-		value:    value,
+	if len(this.selector) >= this.Capacity {
+		this.removeNode(this.Head.Next)
 	}
 
-	l.tail.previous.next = n
-	l.tail.previous = n
-
-	l.selector[key] = n
-
-	if len(l.selector) <= l.capacity {
-		return
+	node := &Node{
+		Prev:  this.Tail.Prev,
+		Next:  this.Tail,
+		Key:   key,
+		Value: value,
 	}
 
-	l.removeNode(l.head.next)
+	node.Prev.Next = node
+	node.Next.Prev = node
+
+	this.selector[key] = node
 
 }
 
-func (l *LRUCache2) removeNode(n *node) {
-	delete(l.selector, n.key)
+func (this *LRUCache2) removeNode(node *Node) {
+	if node == nil {
+		return
+	}
 
-	n.previous.next = n.next
-	n.next.previous = n.previous
+	delete(this.selector, node.Key)
 
+	prev := node.Prev
+	next := node.Next
+	prev.Next = next
+	next.Prev = prev
+
+}
+
+type Node struct {
+	Prev  *Node
+	Next  *Node
+	Key   int
+	Value int
 }
