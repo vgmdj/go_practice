@@ -1,30 +1,53 @@
 package Longest_Increasing_Subsequence
 
 func lengthOfLIS(nums []int) int {
-	if len(nums) == 0 {
-		return 0
-	}
+	increasingArray := make([]int, 0)
 
-	max := 0
-	dp := make([]int, len(nums))
-	for i := 1; i < len(nums); i++ {
-		for j := i - 1; j >= 0; j-- {
-			if nums[i] > nums[j] {
-				dp[i] = Max(dp[j]+1, dp[i])
+	replaceFirstBigerOne := func(value int) {
+		left, right := 0, len(increasingArray)-1
+		for left <= right {
+			mid := right - (right-left)/2
+			if increasingArray[mid] == value {
+				return
 			}
+
+			if increasingArray[mid] > value {
+				right = mid - 1
+
+			} else {
+				left = mid + 1
+
+			}
+
 		}
 
-		max = Max(max,dp[i])
+		increasingArray[left] = value
+	}
+
+	for _, c := range nums {
+		if len(increasingArray) == 0 {
+			increasingArray = append(increasingArray, c)
+			continue
+		}
+
+		left, right := increasingArray[0], increasingArray[len(increasingArray)-1]
+		if c == left || c == right {
+			continue
+		}
+
+		if c > right {
+			increasingArray = append(increasingArray, c)
+			continue
+		}
+
+		if c < left {
+			increasingArray[0] = c
+			continue
+		}
+
+		replaceFirstBigerOne(c)
 
 	}
 
-	return max+1
-}
-
-func Max(a, b int) int {
-	if a > b {
-		return a
-	}
-
-	return b
+	return len(increasingArray)
 }
