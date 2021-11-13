@@ -1,43 +1,22 @@
 package Monotone_Increasing_Digits
 
-import "math"
+import "strconv"
 
-func monotoneIncreasingDigits(N int) int {
-	result, n := 0, N
-	list := make([]int, 10)
-	i := 9
-	for ; i > 0 && n != 0; i-- {
-		list[i] = n % 10
-		n /= 10
+func monotoneIncreasingDigits(n int) int {
+	s := []byte(strconv.Itoa(n))
+	i := 1
+	for i < len(s) && s[i] >= s[i-1] {
+		i++
 	}
-
-	start, end := i, 9
-	for ; i < len(list)-1; i++ {
-		if list[i] > list[i+1] {
-			list[i]--
-			end = i
-			break
+	if i < len(s) {
+		for i > 0 && s[i] < s[i-1] {
+			s[i-1]--
+			i--
 		}
-
-	}
-
-	for index := end - 1; index >= start; index-- {
-		if list[index] > list[index+1] {
-			list[index]--
-			continue
+		for i++; i < len(s); i++ {
+			s[i] = '9'
 		}
-
-		end = index + 1
-		break
 	}
-
-	for ; start <= end; start++ {
-		result = result*10 + list[start]
-	}
-
-	rest := int(math.Pow10(9 - end))
-	result *= rest
-	result += rest - 1
-
-	return result
+	ans, _ := strconv.Atoi(string(s))
+	return ans
 }
